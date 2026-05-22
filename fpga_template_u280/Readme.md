@@ -6,7 +6,7 @@ This repository contains the hardware and software sources to create U280 design
 
 Using this code requires:
 - Alveo U280 FPGA
-- Ubuntu 20.04 GA
+- Ubuntu 20.04 (Kernel 5.15)
 - Vivado and Vitis 2022.2
 - Python3
 
