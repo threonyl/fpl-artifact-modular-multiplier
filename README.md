@@ -14,7 +14,7 @@ For RTL verification see [README](logjumps-hw/README.md)
 
 Selim Kirbiyik - `selim.kirbiyik@tugraz.at`
 
-Maciej Cyuprynko - `maciej.cyuprynko@tugraz.at`
+Maciej Czuprynko - `maciej.czuprynko@tugraz.at`
 
 Florian Hirner - `florian.hirner@tugraz.at`
 
