@@ -29,3 +29,4 @@ The Authors are affiliated with the [Institute of Information Security](https://
 
 # License
 
+MIT License
