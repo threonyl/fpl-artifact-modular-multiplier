@@ -1,0 +1,9 @@
+*.Xil/
+sw/dma/mem/*
+__pycache__
+*.jou
+*.log
+*.str
+project_*_def_val.txt
+project_*_dump.txt
+/hw/proj

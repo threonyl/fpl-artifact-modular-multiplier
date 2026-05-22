@@ -1,0 +1,9 @@
+[project]
+name = "sim-cocotb"
+version = "0.1.0"
+description = "Test RTL files using cocotb."
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "cocotb>=2.0.1",
+]
