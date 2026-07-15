@@ -326,6 +326,25 @@ puts "  Loaded $src_count source file(s)."
 puts ""
 
 # ==============================================================
+# Optional hook-generated top wrapper
+# ==============================================================
+# A PRE_HOOK may synthesize a thin top wrapper on the fly (e.g. to
+# shrink out-of-context I/O for fixed-modulus designs) by setting
+# TOP_WRAPPER_SRC to its SystemVerilog source and TOP to the wrapper's
+# module name.  We write it into build_dir (so it is captured as a
+# build artifact) and read it after the .f sources so it can reference
+# modules defined there.
+if {[info exists TOP_WRAPPER_SRC] && $TOP_WRAPPER_SRC ne ""} {
+    set _twf ${build_dir}/gen_top_wrapper.sv
+    set _twh [open $_twf w]
+    puts $_twh $TOP_WRAPPER_SRC
+    close $_twh
+    read_verilog -sv $_twf
+    puts "  Generated top wrapper: $_twf  (top = $TOP)"
+    puts ""
+}
+
+# ==============================================================
 # RTL Elaboration & Parameter Introspection
 # ==============================================================
 # When TOP is the design root, Vivado does not expose its
@@ -553,12 +572,12 @@ switch -exact -- $EFFORT {
         # -- Aggressive: SSI spread, multi-pass phys_opt ------
         opt_design -directive ExploreWithRemap
 
-        place_design -directive SSI_SpreadLogic_SLR
+        place_design -directive SSI_SpreadLogic_low
 
         # Multi-pass physical optimisation before routing
         phys_opt_design -directive AggressiveExplore
         phys_opt_design -directive AggressiveFanoutOpt
-        phys_opt_design -directive AlternateResynth
+        phys_opt_design -directive AlternateFlowWithRetiming
 
         route_design -directive AggressiveExplore -tns_cleanup
 
@@ -571,11 +590,11 @@ switch -exact -- $EFFORT {
         # -- Ultra: everything in 2, then incremental retry ---
         opt_design -directive ExploreWithRemap
 
-        place_design -directive SSI_SpreadLogic_SLR
+        place_design -directive SSI_SpreadLogic_high
 
         phys_opt_design -directive AggressiveExplore
         phys_opt_design -directive AggressiveFanoutOpt
-        phys_opt_design -directive AlternateResynth
+        phys_opt_design -directive AlternateFlowWithRetiming
 
         route_design -directive AggressiveExplore -tns_cleanup
 
@@ -592,7 +611,7 @@ switch -exact -- $EFFORT {
             place_design -directive ExtraNetDelay_high -post_place_opt
 
             phys_opt_design -directive AggressiveExplore
-            phys_opt_design -directive AlternateResynth
+            phys_opt_design -directive AlternateFlowWithRetiming
 
             route_design -directive AggressiveExplore -tns_cleanup
 
